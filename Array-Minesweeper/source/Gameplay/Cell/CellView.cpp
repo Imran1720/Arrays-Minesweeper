@@ -75,8 +75,8 @@ namespace Gameplay
 
 		Vector2f CellView::getCellPosition(float width,float height)
 		{
-			float xPosition = cell_left_offset + (width * cell_controller->getCellIndex().x);
-			float yPosition = cell_top_offset+(height*cell_controller->getCellIndex().y);
+			float xPosition = cell_left_offset + (width * cell_controller->getCellIndex().y);
+			float yPosition = cell_top_offset+(height*cell_controller->getCellIndex().x);
 			return Vector2f(xPosition,yPosition);
 		}
 

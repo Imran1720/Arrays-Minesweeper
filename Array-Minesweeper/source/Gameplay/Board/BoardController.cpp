@@ -13,7 +13,7 @@ namespace Gameplay
 	namespace Board
 	{
 		
-		BoardController::BoardController()
+		BoardController::BoardController() : random_engine(random_device())
 		{
 			board_model = new BoardModel();
 			board_view = new BoardView(this);
@@ -85,14 +85,20 @@ namespace Gameplay
 
 		int BoardController::getMineCount()
 		{
-			return number_of_mines>=0? number_of_mines:0;
+			return number_of_flags_available>=0? number_of_flags_available:0;
 		}
 
 		void BoardController::openCell(Vector2i position)
 		{
+			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
 
 			if (cells[position.x][position.y]->canOpenCell())
 			{
+				if (board_state == BoardState::FIRST_CELL)
+				{
+					populateBoard(position);
+					board_state = BoardState::PLAYING;
+				}
 				cells[position.x][position.y]->openCell();
 			}
 		}
@@ -102,20 +108,19 @@ namespace Gameplay
 			switch (cells[position.x][position.y]->getCellState())
 			{
 			case CellState::FLAGGED:
-				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
-				(number_of_mines<0)?number_of_mines=1:number_of_mines++;
+				(number_of_flags_available<0)?number_of_flags_available=1:number_of_flags_available++;
 				break;
 			case CellState::HIDDEN:
-				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
-				if (number_of_mines >= 0)
+				if (number_of_flags_available >= 0)
 				{
 
-					number_of_mines--;
+					number_of_flags_available--;
 				}
 				break;
 			}
-			if (number_of_mines >= 0)
+			if (number_of_flags_available >= 0)
 			{
+				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
 				cells[position.x][position.y]->flagCell();
 			}
 		}
@@ -137,7 +142,9 @@ namespace Gameplay
 
 		void BoardController::reset()
 		{
-
+			number_of_flags_available = BoardModel::number_of_mines;
+			number_of_mines = number_of_flags_available;
+			board_state = BoardState::FIRST_CELL;
 			for (int i = 0; i < number_of_rows; i++)
 			{
 				for (int j = 0; j < number_of_columns; j++)
@@ -146,7 +153,86 @@ namespace Gameplay
 				}
 			}
 
-			number_of_mines = BoardModel::number_of_mines;
+			
+		}
+
+		BoardState BoardController::getBoardState()
+		{
+			return board_state;
+		}
+
+		void BoardController::setBoardState(BoardState new_board_state)
+		{
+			board_state = new_board_state;
+		}
+
+		void BoardController::populateBoard(Vector2i position)
+		{
+			populateMines(position);
+			populateCells(position);
+		}
+
+		void BoardController::populateCells(Vector2i position)
+		{
+			for (int a = 0; a < number_of_rows; a++)
+			{
+				for (int b = 0; b < number_of_columns; b++)
+				{
+					if (cells[a][b]->getCellValue() != CellValue::MINE)
+					{
+						CellValue value = static_cast<CellValue>(countMinesAround(sf::Vector2i(a, b)));
+						cells[a][b]->setCellValue(value);
+					}
+				}
+			}
+		}
+
+		void BoardController::populateMines(Vector2i position)
+		{
+			std::uniform_int_distribution<int> xdistribution(0, number_of_columns - 1);
+			std::uniform_int_distribution<int> ydistribution(0, number_of_rows - 1);
+
+			for (int i = 0; i < number_of_mines; i++)
+			{
+				int row = static_cast<int>(ydistribution(random_engine));
+				int col = static_cast<int>(xdistribution(random_engine));
+
+				if ((cells[row][col]->getCellValue() == CellValue::MINE) || (position.x == row && position.y == col))
+				{
+					i--;
+				}
+				else
+				{
+					cells[row][col]->setCellValue(CellValue::MINE);
+				}
+			}
+		}
+
+		bool BoardController::isValidCellPosition(Vector2i cell_position)
+		{
+			return (cell_position.x >= 0 && cell_position.y >= 0 && cell_position.x < number_of_rows && cell_position.y < number_of_columns);
+		}
+
+		int BoardController::countMinesAround(Vector2i cell_position)
+		{
+			int mine_around = 0;
+			for (int i = cell_position.x - 1; i < cell_position.x + 2; i++)
+			{
+				for (int j = cell_position.y - 1; j < cell_position.y + 2; j++)
+				{
+					if ((i == cell_position.x && j == cell_position.y) || !isValidCellPosition(Vector2i(i, j)))
+					{
+						continue;
+					}
+
+					if (cells[i][j]->getCellValue() == CellValue::MINE)
+					{
+						mine_around++;
+					}
+				}
+			}
+
+			return mine_around;
 		}
 
 		

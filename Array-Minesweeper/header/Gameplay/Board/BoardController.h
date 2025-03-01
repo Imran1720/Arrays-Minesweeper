@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <random>
 #include "../../header/Gameplay/Cell/CellController.h"
 #include "../../header/Gameplay/Board/BoardModel.h"
 
@@ -9,16 +10,30 @@ namespace Gameplay
 {
 	namespace Board
 	{
+		enum class BoardState
+		{
+			FIRST_CELL,
+			PLAYING,
+			COMPLETED
+		};
+
 		class BoardView;
 		class BoardController
 		{
+			
 		private:
 			int number_of_columns;
 			int number_of_rows;
+			int number_of_flags_available;
 			int number_of_mines;
+
+			std::default_random_engine random_engine;
+			std::random_device random_device;
 
 			BoardView* board_view;
 			BoardModel* board_model;
+
+			BoardState board_state;
 
 			CellController* cells[BoardModel::number_of_rows][BoardModel::number_of_columns];
 
@@ -46,6 +61,15 @@ namespace Gameplay
 			void flagCell(Vector2i cell_position);
 			void processCellInput(CellController* cell_controller, ButtonType button_type);
 			void reset();
+
+			BoardState getBoardState();
+			void setBoardState(BoardState new_board_state);
+			void populateBoard(Vector2i position);
+			void populateCells(Vector2i position);
+			void populateMines(Vector2i position);
+
+			bool isValidCellPosition(Vector2i position);
+			int countMinesAround(Vector2i cell_position);
 		};
 	}
 }
