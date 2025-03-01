@@ -235,6 +235,23 @@ namespace Gameplay
 			return mine_around;
 		}
 
+		void BoardController::openAllCells()
+		{
+
+			if (board_state == BoardState::FIRST_CELL)
+			{
+				populateBoard(Vector2i(0, 0));
+			}
+
+			for (int i = 0; i < number_of_rows; i++)
+			{
+				for (int j = 0; j < number_of_columns; j++)
+				{
+					cells[i][j]->openCell();
+				}
+			}
+		}
+
 		
 
 		void BoardController::createBoard()
