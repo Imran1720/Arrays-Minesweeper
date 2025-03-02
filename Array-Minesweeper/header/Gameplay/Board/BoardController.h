@@ -58,6 +58,7 @@ namespace Gameplay
 
 			int getMineCount();
 			void openCell(Vector2i cell_position);
+			void openEmptyCell(Vector2i cell_position);
 			void flagCell(Vector2i cell_position);
 			void processCellInput(CellController* cell_controller, ButtonType button_type);
 			void reset();
@@ -71,6 +72,8 @@ namespace Gameplay
 			bool isValidCellPosition(Vector2i position);
 			int countMinesAround(Vector2i cell_position);
 			void openAllCells();
+			void processCellValue(Vector2i position);
+			void processEmptyCell(Vector2i position);
 		};
 	}
 }
