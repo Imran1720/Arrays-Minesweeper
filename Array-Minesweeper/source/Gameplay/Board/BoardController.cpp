@@ -40,6 +40,7 @@ namespace Gameplay
 		{
 			board_view->update();
 			updateBoard();
+			
 		}
 
 		void BoardController::render()
@@ -91,6 +92,8 @@ namespace Gameplay
 
 		void BoardController::openCell(Vector2i position)
 		{
+
+
 			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
 
 			if (cells[position.x][position.y]->canOpenCell())
@@ -103,7 +106,10 @@ namespace Gameplay
 				processCellValue(position);
 				cells[position.x][position.y]->openCell();
 			}
-
+			if (isGameWon())
+			{
+				ServiceLocator::getInstance()->getGameplayService()->endGame(GameResult::WON);
+			}
 		}
 
 		void BoardController::openEmptyCell(Vector2i cell_position)
@@ -158,8 +164,13 @@ namespace Gameplay
 
 		void BoardController::processCellInput(CellController* cell_controller, ButtonType button_type)
 		{
+			if (board_state == BoardState::COMPLETED)
+			{
+				return;
+			}
 			switch (button_type)
 			{
+				
 			case ButtonType::LEFT_MOUSE_BUTTON:
 				openCell(cell_controller->getCellIndex());
 				break;
@@ -323,6 +334,40 @@ namespace Gameplay
 				openAllCells();
 				break;
 			}
+		}
+
+		void BoardController::flagAllMines()
+		{
+			for (int i = 0; i < number_of_rows; i++)
+			{
+				for (int j = 0; j < number_of_columns; j++)
+				{
+					if (cells[i][j]->getCellValue() == CellValue::MINE && cells[i][j]->getCellState() != CellState::FLAGGED)
+					{
+						flagCell(Vector2i(i, j));
+					}
+				}
+			}
+		}
+
+		bool BoardController::isGameWon()
+		{
+			int openedCellCount = 0;
+			for (int i = 0; i < number_of_rows; i++)
+			{
+				for (int j = 0; j < number_of_columns; j++)
+				{
+					if (cells[i][j]->getCellValue() != CellValue::MINE && cells[i][j]->getCellState() == CellState::OPEN)
+					{
+						openedCellCount++;
+					}
+				}
+			}
+			if ((number_of_columns * number_of_rows) - number_of_mines == openedCellCount)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		

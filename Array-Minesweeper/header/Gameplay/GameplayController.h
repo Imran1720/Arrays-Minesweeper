@@ -12,7 +12,7 @@ namespace Gameplay
 	class GameplayController
 	{
 	private :
-		const float max_duration= 10.f;
+		const float max_duration= 60.f;
 		float remaining_time;
 		const float game_over_time = 11.f;
 		GameResult game_result = GameResult::NONE;

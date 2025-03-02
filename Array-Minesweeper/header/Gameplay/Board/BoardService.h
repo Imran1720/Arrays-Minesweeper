@@ -34,6 +34,7 @@ namespace Gameplay
 			void processCellInput(CellController* cell_controller, ButtonType button_type);
 			void showBoard();
 			void setBoardState(BoardState state);
+			void flagAllMines();
 		};
 	}
 }

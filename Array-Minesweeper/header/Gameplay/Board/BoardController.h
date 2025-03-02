@@ -77,6 +77,8 @@ namespace Gameplay
 			void processMineCell(Vector2i position);
 
 			void showBoard();
+			void flagAllMines();
+			bool isGameWon();
 		};
 	}
 }

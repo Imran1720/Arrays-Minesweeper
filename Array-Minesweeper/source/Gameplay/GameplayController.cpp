@@ -48,6 +48,7 @@ namespace Gameplay
 
 	void GameplayController::restart()
 	{
+		game_result = GameResult::NONE;
 		remaining_time = max_duration;
 	}
 
@@ -78,11 +79,18 @@ namespace Gameplay
 
 	void GameplayController::gameWon()
 	{
+		ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::GAME_WON);
+		game_result = GameResult::WON;
+		beginGameOverTimer();
+
+		ServiceLocator::getInstance()->getBoardService()->setBoardState(BoardState::COMPLETED);
+		ServiceLocator::getInstance()->getBoardService()->flagAllMines();
+
+
 	}
 
 	void GameplayController::gameLost()
 	{
-		cout << (int)game_result << endl;
 		if (game_result == GameResult::NONE)
 		{
 			game_result = GameResult::LOST;
