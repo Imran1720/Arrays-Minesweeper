@@ -1,6 +1,6 @@
 
 #include "../../header/Gameplay/Board/BoardService.h"
-#include "../../header/Gameplay/Board/BoardController.h"
+
 
 
 namespace Gameplay
@@ -50,6 +50,20 @@ namespace Gameplay
 
 			board_controller->processCellInput(cell_controller, button_type);
 		}
+
+		void BoardService::showBoard()
+		{
+			board_controller->showBoard();
+		}
+
+		void BoardService::setBoardState(BoardState state)
+		{
+			board_controller->setBoardState(state);
+		}
+
+	
+
+		
 
 		void BoardService::destroy()
 		{

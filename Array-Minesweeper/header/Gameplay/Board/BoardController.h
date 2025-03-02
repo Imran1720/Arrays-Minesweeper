@@ -74,6 +74,9 @@ namespace Gameplay
 			void openAllCells();
 			void processCellValue(Vector2i position);
 			void processEmptyCell(Vector2i position);
+			void processMineCell(Vector2i position);
+
+			void showBoard();
 		};
 	}
 }

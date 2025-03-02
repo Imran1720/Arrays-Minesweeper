@@ -1,7 +1,9 @@
 #include "../../header/Gameplay/GameplayController.h"
 #include "../../header/Global/ServiceLocator.h"
+#include "../../header/Main/GameService.h"
 
 using namespace Global;
+using namespace Main;
 namespace Gameplay
 {
 	
@@ -51,6 +53,51 @@ namespace Gameplay
 	{
 		remaining_time -= ServiceLocator::getInstance()->getTimeService()->getDeltaTime(); 
 
+	}
+
+	void GameplayController::endGame(GameResult result)
+	{
+		switch (result)
+		{
+		case GameResult::WON:
+			gameWon();
+			break;
+
+		case GameResult::LOST:
+			gameLost();
+			break;
+		}
+	}
+
+	void GameplayController::gameWon()
+	{
+	}
+
+	void GameplayController::gameLost()
+	{
+		if (game_result == GameResult::NONE)
+		{
+			game_result = GameResult::LOST;
+
+			beginGameOverTimer();
+			ServiceLocator::getInstance()->getBoardService()->showBoard();
+			ServiceLocator::getInstance()->getBoardService()->setBoardState(BoardState::COMPLETED);
+
+		}
+		else
+		{
+			showCredits();
+		}
+	}
+
+	void GameplayController::beginGameOverTimer()
+	{
+		remaining_time = game_over_time;
+	}
+
+	void GameplayController::showCredits()
+	{
+		GameService::setGameState(GameState::CREDITS);
 	}
 
 

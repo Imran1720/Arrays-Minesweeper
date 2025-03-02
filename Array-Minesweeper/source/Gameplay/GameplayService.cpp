@@ -46,6 +46,11 @@ namespace Gameplay
         return gameplay_controller->getRemainingTime();
     }
 
+    void GameplayService::endGame(GameResult result)
+    {
+        gameplay_controller->endGame(result);
+    }
+
     void Gameplay::GameplayService::destroy()
     {
         delete(gameplay_controller);

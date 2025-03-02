@@ -2,6 +2,7 @@
 #include "../../header/Gameplay/Board/BoardView.h"
 #include "../../header/Gameplay/Board/BoardModel.h"
 #include "../../header/Global/ServiceLocator.h"
+#include "../../header/Gameplay/GameplayController.h"
 
 #include <iostream>
 using namespace std;
@@ -149,7 +150,7 @@ namespace Gameplay
 			}
 			if (number_of_flags_available >= 0)
 			{
-				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
+				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::FLAG_SOUND);
 				cells[position.x][position.y]->flagCell();
 			}
 		}
@@ -267,11 +268,6 @@ namespace Gameplay
 		void BoardController::openAllCells()
 		{
 
-			if (board_state == BoardState::FIRST_CELL)
-			{
-				populateBoard(Vector2i(0, 0));
-			}
-
 			for (int i = 0; i < number_of_rows; i++)
 			{
 				for (int j = 0; j < number_of_columns; j++)
@@ -290,8 +286,10 @@ namespace Gameplay
 				break;
 
 			case CellValue::MINE:
+				processMineCell(position);
 				break;
-			default:ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
+			default:
+				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
 				break;
 			}
 		}
@@ -300,6 +298,31 @@ namespace Gameplay
 		{
 			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
 			openEmptyCell(position);
+		}
+
+		void BoardController::processMineCell(Vector2i position)
+		{
+			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::EXPLOSION);
+			ServiceLocator::getInstance()->getGameplayService()->endGame(GameResult::LOST);
+		}
+
+		void BoardController::showBoard()
+		{
+			switch (getBoardState())
+			{
+			case BoardState::FIRST_CELL:
+				populateBoard(Vector2i(0, 0));
+				openAllCells();
+				break;
+
+			case BoardState::PLAYING:
+
+				break;
+
+			case BoardState::COMPLETED:
+				openAllCells();
+				break;
+			}
 		}
 
 		

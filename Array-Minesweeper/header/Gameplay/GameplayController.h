@@ -2,12 +2,20 @@
 
 namespace Gameplay
 {
+	enum class GameResult
+	{
+		NONE,
+		WON,
+		LOST
+	};
+
 	class GameplayController
 	{
 	private :
-		const float max_duration= 301.f;
+		const float max_duration= 10.f;
 		float remaining_time;
-
+		const float game_over_time = 11.f;
+		GameResult game_result;
 		void destroy();
 
 	public :
@@ -22,5 +30,12 @@ namespace Gameplay
 		void restart();
 		int getNumberOfMines();
 		void updateRemainingTime();
+
+		void endGame(GameResult result);
+		void gameWon();
+		void gameLost();
+		void beginGameOverTimer();
+		void showCredits();
+
 	};
 }
