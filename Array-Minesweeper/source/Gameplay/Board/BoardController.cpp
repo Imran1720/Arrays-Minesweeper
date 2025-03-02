@@ -99,8 +99,10 @@ namespace Gameplay
 					populateBoard(position);
 					board_state = BoardState::PLAYING;
 				}
+				processCellValue(position);
 				cells[position.x][position.y]->openCell();
 			}
+
 		}
 
 		void BoardController::flagCell(Vector2i position)
@@ -249,6 +251,20 @@ namespace Gameplay
 				{
 					cells[i][j]->openCell();
 				}
+			}
+		}
+
+		void BoardController::processCellValue(Vector2i position)
+		{
+			switch (cells[position.x][position.y]->getCellValue())
+			{
+			case CellValue::EMPTY:
+				break;
+
+			case CellValue::MINE:
+				break;
+			default:ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
+				break;
 			}
 		}
 

@@ -70,6 +70,7 @@ namespace Gameplay
 
 			bool isValidCellPosition(Vector2i position);
 			int countMinesAround(Vector2i cell_position);
+			void openAllCells();
 		};
 	}
 }
