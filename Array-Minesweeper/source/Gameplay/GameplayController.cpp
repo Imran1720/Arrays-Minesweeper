@@ -2,6 +2,9 @@
 #include "../../header/Global/ServiceLocator.h"
 #include "../../header/Main/GameService.h"
 
+#include <iostream>
+using namespace std;
+
 using namespace Global;
 using namespace Main;
 namespace Gameplay
@@ -22,6 +25,10 @@ namespace Gameplay
 	void GameplayController::update()
 	{
 		updateRemainingTime();
+		if (isTimeOver())
+		{
+			endGame(GameResult::LOST);
+		}
 	}
 
 	void GameplayController::render()
@@ -75,6 +82,7 @@ namespace Gameplay
 
 	void GameplayController::gameLost()
 	{
+		cout << (int)game_result << endl;
 		if (game_result == GameResult::NONE)
 		{
 			game_result = GameResult::LOST;
@@ -98,6 +106,11 @@ namespace Gameplay
 	void GameplayController::showCredits()
 	{
 		GameService::setGameState(GameState::CREDITS);
+	}
+
+	bool GameplayController::isTimeOver()
+	{
+		return remaining_time<=0;
 	}
 
 

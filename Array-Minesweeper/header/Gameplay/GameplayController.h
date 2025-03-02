@@ -15,7 +15,7 @@ namespace Gameplay
 		const float max_duration= 10.f;
 		float remaining_time;
 		const float game_over_time = 11.f;
-		GameResult game_result;
+		GameResult game_result = GameResult::NONE;
 		void destroy();
 
 	public :
@@ -36,6 +36,7 @@ namespace Gameplay
 		void gameLost();
 		void beginGameOverTimer();
 		void showCredits();
+		bool isTimeOver();
 
 	};
 }
