@@ -38,5 +38,7 @@ namespace Gameplay
 		void showCredits();
 		bool isTimeOver();
 
+		GameResult getGameResult();
+
 	};
 }

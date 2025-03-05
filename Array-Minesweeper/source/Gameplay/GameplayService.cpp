@@ -51,6 +51,11 @@ namespace Gameplay
         gameplay_controller->endGame(result);
     }
 
+    GameResult GameplayService::getGameResult()
+    {
+        return gameplay_controller->getGameResult();
+    }
+
     void Gameplay::GameplayService::destroy()
     {
         delete(gameplay_controller);

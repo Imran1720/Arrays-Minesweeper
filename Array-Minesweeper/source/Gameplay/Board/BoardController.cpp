@@ -94,7 +94,6 @@ namespace Gameplay
 		{
 
 
-			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
 
 			if (cells[position.x][position.y]->canOpenCell())
 			{
@@ -156,7 +155,6 @@ namespace Gameplay
 			}
 			if (number_of_flags_available >= 0)
 			{
-				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::FLAG_SOUND);
 				cells[position.x][position.y]->flagCell();
 			}
 		}
@@ -176,6 +174,8 @@ namespace Gameplay
 				break;
 
 			case ButtonType::RIGHT_MOUSE_BUTTON:
+				ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::FLAG_SOUND);
+
 				flagCell(cell_controller->getCellIndex());
 				break;
 			}
@@ -293,6 +293,7 @@ namespace Gameplay
 			switch (cells[position.x][position.y]->getCellValue())
 			{
 			case CellValue::EMPTY:
+
 				processEmptyCell(position);
 				break;
 
@@ -308,13 +309,15 @@ namespace Gameplay
 		void BoardController::processEmptyCell(Vector2i position)
 		{
 			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::BUTTON_CLICK);
+
 			openEmptyCell(position);
 		}
 
 		void BoardController::processMineCell(Vector2i position)
 		{
-			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::EXPLOSION);
 			ServiceLocator::getInstance()->getGameplayService()->endGame(GameResult::LOST);
+			ServiceLocator::getInstance()->getSoundService()->playSound(SoundType::EXPLOSION);
+			openAllCells();
 		}
 
 		void BoardController::showBoard()
@@ -363,7 +366,7 @@ namespace Gameplay
 					}
 				}
 			}
-			if ((number_of_columns * number_of_rows) - number_of_mines == openedCellCount)
+			if ((number_of_columns * number_of_rows) - number_of_mines == openedCellCount && ServiceLocator::getInstance()->getGameplayService()->getGameResult()==GameResult::WON)
 			{
 				return true;
 			}

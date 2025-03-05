@@ -121,6 +121,11 @@ namespace Gameplay
 		return remaining_time<=0;
 	}
 
+	GameResult GameplayController::getGameResult()
+	{
+		return game_result;
+	}
+
 
 	void GameplayController::destroy()
 	{
