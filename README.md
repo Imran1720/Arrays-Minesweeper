@@ -1,5 +1,5 @@
 # 🧨 Minesweeper - Classic Puzzle Game
-inesweeper is a classic logic-based puzzle game where your goal is to uncover all the safe tiles without detonating any hidden mines. Each number you reveal indicates how many mines are adjacent to that tile. By using logic and careful thinking, you can progressively clear the board while avoiding the mines. One wrong click, and it's game over!
+Minesweeper is a classic logic-based puzzle game where your goal is to uncover all the safe tiles without detonating any hidden mines. Each number you reveal indicates how many mines are adjacent to that tile. By using logic and careful thinking, you can progressively clear the board while avoiding the mines. One wrong click, and it's game over!
 
 ### Gameplay
 
