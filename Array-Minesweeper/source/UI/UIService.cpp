@@ -1,6 +1,8 @@
 #include "../../header/UI/UIService.h"
 #include "../../header/Main/GameService.h"
 #include "../../header/UI/UIElement/TextView.h"
+#include "../../header/Time/TimeService.h"
+
 
 namespace UI
 {
@@ -12,12 +14,14 @@ namespace UI
 	using namespace UIElement;
 	using namespace Interface;
 
+
 	UIService::UIService()
 	{
 		splash_screen_controller = nullptr;
 		main_menu_controller = nullptr;
 		credit_screen_controller = nullptr;
 		instructions_screen_controller = nullptr;
+		gameplay_ui_controller = nullptr;
 
 		createControllers();
 	}
@@ -28,6 +32,7 @@ namespace UI
 		main_menu_controller = new MainMenuUIController();
 		credit_screen_controller = new CreditsScreenUIController();
 		instructions_screen_controller = new InstructionsScreenUIController();
+		gameplay_ui_controller = new GameplayUI::GameplayUIController();
 	}
 
 	UIService::~UIService()
@@ -65,6 +70,7 @@ namespace UI
 		main_menu_controller->initialize();
 		credit_screen_controller->initialize();
 		instructions_screen_controller->initialize();
+		gameplay_ui_controller->initialize();
 	}
 
 	IUIController* UIService::getCurrentUIController()
@@ -76,6 +82,9 @@ namespace UI
 
 		case GameState::MAIN_MENU:
 			return main_menu_controller;
+
+		case GameState::GAMEPLAY:
+			return gameplay_ui_controller;
 
 		case GameState::INSTRUCTIONS:
 			return instructions_screen_controller;
@@ -94,5 +103,6 @@ namespace UI
 		delete(main_menu_controller);
 		delete(instructions_screen_controller);
 		delete(credit_screen_controller);
+		delete(gameplay_ui_controller);
 	}
 }
