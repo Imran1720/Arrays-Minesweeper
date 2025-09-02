@@ -3,16 +3,31 @@
 #include "../../header/Event/EventService.h"
 #include "../../header/UI/UIService.h"
 #include "../../header/Sound/SoundService.h"
+#include "../../header/Time/TimeService.h"
+#include "../../header/Gameplay/Board/BoardService.h"
+#include "../../header/Gameplay/GameplayService.h"
+
+using namespace Event;
+using namespace Graphics;
+using namespace Sound;
+using namespace Time;
+using namespace UI;
+using namespace Gameplay;
+using namespace Gameplay::GameplayUI;
+using namespace Gameplay::Board;
 
 namespace Global
 {
     class ServiceLocator
     {
     private:
-        Event::EventService* event_service;
-        Graphics::GraphicService* graphic_service;
-        Sound::SoundService* sound_service;
-        UI::UIService* ui_service;
+        EventService* event_service;
+        GraphicService* graphic_service;
+        TimeService* time_service;
+        SoundService* sound_service;
+        UIService* ui_service;
+        BoardService* board_service;
+        GameplayService* gameplay_service;
 
         ServiceLocator();
         ~ServiceLocator();
@@ -27,10 +42,14 @@ namespace Global
         void update();
         void render();
 
-        Event::EventService* getEventService();
-        Graphics::GraphicService* getGraphicService();
-        Sound::SoundService* getSoundService();
-        UI::UIService* getUIService();
+        EventService* getEventService();
+        GraphicService* getGraphicService();
+        SoundService* getSoundService();
+        UIService* getUIService();
+        BoardService* getBoardService();
+        GameplayService* getGameplayService();
+        TimeService* getTimeService();
+
         void deleteServiceLocator();
     };
 }
